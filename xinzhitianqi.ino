@@ -36,9 +36,10 @@ String reqLocation = "Xian";            // 城市
 String reqUnit = "c";                      // 摄氏/华氏
 
 void setup() {
+  u8g2.enableUTF8Print();
+  u8g2.begin();
   Serial.begin(9600);
   Serial.println("");
-
   // 连接WiFi
   connectWiFi();
 }
@@ -51,16 +52,8 @@ void loop() {
 
   // 向心知天气服务器服务器请求信息并对信息进行解析
   httpRequest(reqRes);
-  delay(20000);
-  u8g2.setFont(u8g2_font_unifont_t_chinese2);
-  u8g2.setCursor(0, 14);
-  u8g2.print("Waiting for WiFi");
-  u8g2.setCursor(0, 30);
-  u8g2.print("connection...");
-  u8g2.setCursor(0, 47);
-  u8g2.print("flyAkari");
-  u8g2.setCursor(0, 64);
-  u8g2.print("192.168.4.1");
+  delay(1000);
+
 }
 
 // 向心知天气服务器服务器请求信息并对信息进行解析
@@ -148,7 +141,8 @@ void parseInfo(WiFiClient client) {
 
   Serial.println(F("======Weahter Now======="));
   Serial.print(F("Weather Now: "));
-  Serial.print(results_0_now_text_str);
+  String s = results_0_now_text_str;
+  Serial.print(s);
   Serial.print(F(" "));
   Serial.println(results_0_now_code_int);
   Serial.print(F("Temperature: "));
@@ -158,4 +152,21 @@ void parseInfo(WiFiClient client) {
   Serial.println(F("========================"));
   //initdisplay();
 
+  u8g2.firstPage();
+  do {
+    u8g2.setFont(u8g2_font_luBIS18_tf);
+    u8g2.drawUTF8(30, 43, s.c_str());
+    //u8g2.drawUTF8(30, 63, "he");
+
+  } while ( u8g2.nextPage() );
+  delay(5000);
+
+  char m_str[3];
+  strcpy(m_str, u8x8_u8toa(results_0_now_temperature_int, 2));
+  u8g2.firstPage();
+  do {
+    u8g2.setFont(u8g2_font_luBIS18_tf);
+    u8g2.drawStr(30, 43, m_str);
+  } while ( u8g2.nextPage() );
+  delay(5000);
 }
