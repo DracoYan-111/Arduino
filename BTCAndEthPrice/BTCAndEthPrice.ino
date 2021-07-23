@@ -22,6 +22,8 @@ String reqRes = "/v3/weather/now.json?key=" + reqUserKey +
 //===================================
 String BtcAddress = "https://api.coincap.io/v2/assets/bitcoin";
 String EthAddress = "https://api.coincap.io/v2/assets/ethereum";
+int ethPrice;
+int btcPrice;
 //===================================
 
 void setup() {
@@ -35,7 +37,6 @@ void setup() {
 
 
 void loop() {
-  //
   String btcToken = TestHttpsAPI(BtcAddress);
   String ethToken = TestHttpsAPI(EthAddress);
   for (int i = 0 ; i < 3; i++) {
@@ -43,6 +44,7 @@ void loop() {
       httpRequest(reqRes);
     } else {
       ProcessBtcAndDisplay(btcToken);
+
     }
     delay(3000);
     if (ethToken == "") {
@@ -108,9 +110,15 @@ String TestHttpsAPI(String token) {
 void ProcessBtcAndDisplay(String data) {
   String tokenName;
   String tokenPrice;
+  String starts;
   tokenName =  data.substring(data.length() - 368, data.length() - 371);
   tokenPrice = data.substring(data.length() - 161, data.length() - 166);
-
+  if ( tokenPrice.toInt() > ethPrice ) {
+    starts = "UP";
+  } else {
+    starts = "LOW";
+  }
+  btcPrice = tokenPrice.toInt();
   u8g2.firstPage();
   do {
     u8g2.setFont(u8g2_font_luBIS24_tf);
@@ -120,17 +128,26 @@ void ProcessBtcAndDisplay(String data) {
   u8g2.firstPage();
   do {
     u8g2.setFont(u8g2_font_luBIS24_tf);
-    u8g2.drawUTF8(3, 43, tokenPrice.c_str());
+    u8g2.drawUTF8(0, 23, starts.c_str());
+    u8g2.drawUTF8(3, 63, tokenPrice.c_str());
   } while ( u8g2.nextPage() );
   delay(3000);
+
 }
 
 //处理并展示eth价格
 void ProcessEthAndDisplay(String data) {
   String tokenName;
   String tokenPrice;
+  String starts;
   tokenName =  data.substring(data.length() - 342, data.length() - 345);
   tokenPrice = data.substring(data.length() - 157, data.length() - 161);
+  if (tokenPrice.toInt() > ethPrice) {
+    starts = "UP";
+  } else {
+    starts = "LOW";
+  }
+  ethPrice = tokenPrice.toInt();
   u8g2.firstPage();
   do {
     u8g2.setFont(u8g2_font_luBIS24_tf);
@@ -140,7 +157,8 @@ void ProcessEthAndDisplay(String data) {
   u8g2.firstPage();
   do {
     u8g2.setFont(u8g2_font_luBIS24_tf);
-    u8g2.drawUTF8(16, 43, tokenPrice.c_str());
+    u8g2.drawUTF8(0, 23, starts.c_str());
+    u8g2.drawUTF8(16, 63, tokenPrice.c_str());
   } while ( u8g2.nextPage() );
   delay(3000);
 }
