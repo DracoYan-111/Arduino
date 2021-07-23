@@ -37,14 +37,14 @@ void setup() {
 
 
 void loop() {
+  //
   String btcToken = TestHttpsAPI(BtcAddress);
   String ethToken = TestHttpsAPI(EthAddress);
-  for (int i = 0 ; i < 3; i++) {
+  for (int i = 0 ; i < 9; i++) {
     if (btcToken == "") {
       httpRequest(reqRes);
     } else {
       ProcessBtcAndDisplay(btcToken);
-
     }
     delay(3000);
     if (ethToken == "") {
@@ -53,8 +53,7 @@ void loop() {
       ProcessEthAndDisplay(ethToken);
     }
   }
-  Serial.println("在下一轮之前等待 20 秒不要在 API 服务器上被禁止......");
-  delay(20000);
+  delay(1000);
 }
 
 // 连接WiFi
@@ -68,12 +67,12 @@ void connectWiFi() {
     delay(5000);                               // 如果WiFi连接成功则返回值为WL_CONNECTED
     Serial.print("第");
     Serial.print(i++);
-    Serial.println("次连接");      // 此处通过While循环让NodeMCU每隔一秒钟检查一次WiFi.status()函数返回值
+    Serial.println("次连接");                   // 此处通过While循环让NodeMCU每隔一秒钟检查一次WiFi.status()函数返回值
   }                                            // 同时NodeMCU将通过串口监视器输出连接时长读秒。
   // 这个读秒是通过变量i每隔一秒自加1来实现的。
   Serial.println("");                          // WiFi连接成功后
-  Serial.println("连接成功!");   // NodeMCU将通过串口监视器输出"连接成功"信息。
-  Serial.print("IP 地址:");             // 同时还将输出NodeMCU的IP地址。这一功能是通过调用
+  Serial.println("连接成功!");                   // NodeMCU将通过串口监视器输出"连接成功"信息。
+  Serial.print("IP 地址:");                     // 同时还将输出NodeMCU的IP地址。这一功能是通过调用
   Serial.println(WiFi.localIP());              // WiFi.localIP()函数来实现的。该函数的返回值即NodeMCU的IP地址。
   Serial.println("====================");
 }
@@ -224,7 +223,6 @@ void parseInfo(WiFiClient client) {
     u8g2.drawUTF8(15, 43, s.c_str());
   } while ( u8g2.nextPage() );
   delay(1100);
-
   char m_str[3];
   strcpy(m_str, u8x8_u8toa(results_0_now_temperature_int, 2));
   u8g2.firstPage();
