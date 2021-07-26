@@ -110,24 +110,12 @@ void ProcessBtcAndDisplay(String data) {
   String tokenName;
   String tokenPrice;
   String starts;
-  tokenName =  data.substring(data.length() - 368, data.length() - 371);
-  tokenPrice = data.substring(data.length() - 161, data.length() - 166);
-  if ( tokenPrice.toInt() > ethPrice ) {
-    starts = "UP";
-  } else {
-    starts = "LOW";
-  }
-  btcPrice = tokenPrice.toInt();
+  tokenName =  data.substring(data.length() - 369, data.length() - 372);
+  tokenPrice = data.substring(data.length() - 162, data.length() - 167);
   u8g2.firstPage();
   do {
     u8g2.setFont(u8g2_font_luBIS24_tf);
-    u8g2.drawUTF8(26, 43, tokenName.c_str());
-  } while ( u8g2.nextPage() );
-  delay(1100);
-  u8g2.firstPage();
-  do {
-    u8g2.setFont(u8g2_font_luBIS24_tf);
-    u8g2.drawUTF8(0, 23, starts.c_str());
+    u8g2.drawUTF8(0, 23, tokenName.c_str());
     u8g2.drawUTF8(3, 63, tokenPrice.c_str());
   } while ( u8g2.nextPage() );
   delay(3000);
@@ -141,22 +129,10 @@ void ProcessEthAndDisplay(String data) {
   String starts;
   tokenName =  data.substring(data.length() - 342, data.length() - 345);
   tokenPrice = data.substring(data.length() - 157, data.length() - 161);
-  if (tokenPrice.toInt() > ethPrice) {
-    starts = "UP";
-  } else {
-    starts = "LOW";
-  }
-  ethPrice = tokenPrice.toInt();
   u8g2.firstPage();
   do {
     u8g2.setFont(u8g2_font_luBIS24_tf);
-    u8g2.drawUTF8(26, 43, tokenName.c_str());
-  } while ( u8g2.nextPage() );
-  delay(1100);
-  u8g2.firstPage();
-  do {
-    u8g2.setFont(u8g2_font_luBIS24_tf);
-    u8g2.drawUTF8(0, 23, starts.c_str());
+    u8g2.drawUTF8(0, 23, tokenName.c_str());
     u8g2.drawUTF8(16, 63, tokenPrice.c_str());
   } while ( u8g2.nextPage() );
   delay(3000);
