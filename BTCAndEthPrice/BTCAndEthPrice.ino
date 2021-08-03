@@ -127,8 +127,8 @@ void ProcessEthAndDisplay(String data) {
   String tokenName;
   String tokenPrice;
   String starts;
-  tokenName =  data.substring(data.length() - 342, data.length() - 345);
-  tokenPrice = data.substring(data.length() - 157, data.length() - 161);
+  tokenName =  data.substring(data.length() - 343, data.length() - 346);
+  tokenPrice = data.substring(data.length() - 158, data.length() - 162);
   u8g2.firstPage();
   do {
     u8g2.setFont(u8g2_font_luBIS24_tf);
