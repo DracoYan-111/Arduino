@@ -74,11 +74,11 @@ void connectWiFi() {
   Serial.println("连接成功!");                   // NodeMCU将通过串口监视器输出"连接成功"信息。
   Serial.print("IP 地址:");                     // 同时还将输出NodeMCU的IP地址。这一功能是通过调用
   Serial.println(WiFi.localIP());              // WiFi.localIP()函数来实现的。该函数的返回值即NodeMCU的IP地址。
-  Serial.println("====================");
 }
 
 //https请求
 String TestHttpsAPI(String token) {
+  Serial.println("====================");
   std::unique_ptr<BearSSL::WiFiClientSecure>client(new BearSSL::WiFiClientSecure);
   client->setInsecure();
   HTTPClient https;
@@ -106,34 +106,43 @@ String TestHttpsAPI(String token) {
 }
 
 //处理并展示btc价格
-void ProcessBtcAndDisplay(String data) {
-  String tokenName;
-  String tokenPrice;
-  String starts;
-  tokenName =  data.substring(data.length() - 369, data.length() - 372);
-  tokenPrice = data.substring(data.length() - 162, data.length() - 167);
+void ProcessBtcAndDisplay(String datas) {
+  Serial.println("====================");
+  DynamicJsonDocument doc(1024);
+  deserializeJson(doc, datas);
+  JsonObject obj = doc.as<JsonObject>();
+  String data = obj["data"];
+  deserializeJson(doc, data);
+  String symbol = obj["symbol"];
+  String priceUsd = obj["priceUsd"];
+  String price = priceUsd.substring(0 , priceUsd.length() - 17);
+
   u8g2.firstPage();
   do {
     u8g2.setFont(u8g2_font_luBIS24_tf);
-    u8g2.drawUTF8(0, 23, tokenName.c_str());
-    u8g2.drawUTF8(3, 63, tokenPrice.c_str());
+    u8g2.drawUTF8(0, 23, symbol.c_str());
+    u8g2.drawUTF8(3, 63, price.c_str());
   } while ( u8g2.nextPage() );
   delay(3000);
 
 }
 
 //处理并展示eth价格
-void ProcessEthAndDisplay(String data) {
-  String tokenName;
-  String tokenPrice;
-  String starts;
-  tokenName =  data.substring(data.length() - 343, data.length() - 346);
-  tokenPrice = data.substring(data.length() - 158, data.length() - 162);
+void ProcessEthAndDisplay(String datas) {
+  Serial.println("====================");
+  DynamicJsonDocument doc(1024);
+  deserializeJson(doc, datas);
+  JsonObject obj = doc.as<JsonObject>();
+  String data = obj["data"];
+  deserializeJson(doc, data);
+  String symbol = obj["symbol"];
+  String priceUsd = obj["priceUsd"];
+  String price = priceUsd.substring(0 , priceUsd.length() - 17);
   u8g2.firstPage();
   do {
     u8g2.setFont(u8g2_font_luBIS24_tf);
-    u8g2.drawUTF8(0, 23, tokenName.c_str());
-    u8g2.drawUTF8(16, 63, tokenPrice.c_str());
+    u8g2.drawUTF8(0, 23, symbol.c_str());
+    u8g2.drawUTF8(16, 63, price.c_str());
   } while ( u8g2.nextPage() );
   delay(3000);
 }
